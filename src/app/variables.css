@@ -1,0 +1,16 @@
+:root {
+  --header-height: 1.5rem;
+  --header-height-mobile: 7.5rem;
+
+  --ff-primary: "Montserrat", sans-serif;
+
+  --clr-primary: #79b564;
+  --clr-secondary: #336463;
+  --clr-tertiary: #648670;
+  --clr-black: #06070a;
+  --clr-white: #ffffff;
+
+  --spacing: 0.25rem;
+  --transition: all 0.2s linear;
+  --dark-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+}

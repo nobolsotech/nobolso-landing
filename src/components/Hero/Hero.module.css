@@ -1,0 +1,224 @@
+.hero{
+    padding-block: calc(var(--header-height) + 1.6rem);
+    margin-top: 2rem;
+}
+
+.background img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 1;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1400px;
+  padding: 0 3rem;
+  margin-top: 2rem;
+  margin-bottom: 6rem;
+}
+
+.HeroContent {
+    display: flex;
+    flex-direction: column;
+    gap: 8rem;
+}
+
+.HeroContent img {
+    width: 270px;
+}
+
+.Titles{
+    display: flex;
+    flex-direction: column;
+}
+
+.Title1 {
+    font-size: 3.5rem;
+    font-weight: 300;
+    max-width: 350px;
+    line-height: 1.6;
+}
+
+.Title2 {
+    font-size: 5rem;
+    font-weight: 700;
+    background: linear-gradient(145deg, #336463,#79b564,#79b564);
+    background-clip: text;
+    color: transparent;
+    margin-left: -4px;
+
+}
+
+.Title3 {
+    font-size: 13rem;
+    font-weight: 600;
+    line-height: .8;
+    margin-left: -10px;
+}
+
+.subTitle1 {
+    font-size: 5rem;
+    font-weight: 300;
+    padding-top: 1rem;
+}
+
+.subTitle1 span {
+    font-weight: 600;
+}
+
+.subTitle2 {
+    font-size: 5rem;
+    font-weight: 300;
+    background: linear-gradient(145deg, transparent, transparent, transparent, #336463, #79b564, #79b564);
+    padding: .3rem 1.5rem;
+    border-radius: 5rem;
+    margin-left: -15px;
+}
+
+.subTitle2 span {
+    font-weight: 600;
+}
+
+
+.HeroImg {
+    zoom: 200%;
+    opacity: .3;
+}
+
+.HeroInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.text {
+  font-size: 2.1rem;
+  line-height: 1.3;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1400px;
+  padding: 0 3rem;
+}
+
+@media screen and (max-width: 1580px) {
+  .container {
+        max-width: 1300px;
+    }
+
+  .text {
+        max-width: 1300px;
+    }
+}
+
+
+@media screen and (max-width: 1450px) {
+    .HeroContent img {
+        width: 240px;
+    }
+
+    .Title1 {
+        font-size: 2.5rem;
+    }
+
+    .Title2 {
+        font-size: 5rem;
+    }
+
+    .Title3 {
+        font-size: 12rem;
+    }
+
+    .subTitle1 {
+        font-size: 4rem;
+    }
+
+    .subTitle2 {
+        font-size: 4rem;
+    }
+
+    .HeroInfo {
+        gap: 2rem;
+    }
+
+    .text {
+        font-size: 1.6rem;
+    }
+
+}
+
+@media screen and (max-width: 1370px) {
+    .container {
+        max-width: 1100px;
+    }
+
+    .text {
+        max-width: 1100px;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .HeroContent img {
+        width: 210px;
+    }
+
+    .Title1 {
+        font-size: 2rem;
+    }
+
+    .Title2 {
+        font-size: 4rem;
+    }
+
+    .Title3 {
+        font-size: 10rem;
+    }
+
+    .subTitle1 {
+        font-size: 3rem;
+    }
+
+    .subTitle2 {
+        font-size: 3rem;
+    }
+
+    .HeroInfo {
+        gap: 1rem;
+    }
+
+    .text {
+        font-size: 1.4rem;
+    }
+}
+
+@media screen and (max-width: 405px) {
+    .HeroContent img {
+        width: 180px;
+    }
+
+    .Title1 {
+        font-size: 2rem;
+    }
+
+    .Title2 {
+        font-size: 3.5rem;
+    }
+
+    .Title3 {
+        font-size: 8rem;
+        margin-left: -7px;
+    }
+
+    .subTitle1 {
+        font-size: 2.7rem;
+    }
+
+    .subTitle2 {
+        font-size: 2.7rem;
+    }
+}

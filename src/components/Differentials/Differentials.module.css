@@ -1,0 +1,49 @@
+.differentials {
+    padding-block: calc(var(--header-height) + 1.6rem);
+}
+
+.images {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8rem;
+}
+
+.img2 {
+    max-height: 90dvh;
+}
+
+@media screen and (max-width: 1540px) {
+    .img1 {
+        max-height: 75dvh;
+    }
+
+    .img2 {
+        max-height: 75dvh;
+    }
+
+}
+
+@media screen and (max-width: 1370px) {
+    .img1 {
+        max-height: 55dvh;
+    }
+
+    .img2 {
+        max-height: 55dvh;
+    }
+}
+
+@media screen and (max-width: 1035px) {
+    .images {
+        display: flex;
+        flex-direction: column;
+        gap: 8rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .img1 {
+        max-height: 45dvh;
+    }
+}
