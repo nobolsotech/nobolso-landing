@@ -7,6 +7,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import styles from "./Forms.module.css";
 
 export default function Forms() {
+  const PLUNK_SECRET_KEY = "sk_be85d336e951474126d66761c943c11cbc923213ff77cbfbb3d4e5ba4275343e";
+  const PLUNK_API_URL = 'https://next-api.useplunk.com';
+
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-50px" });
 
@@ -36,9 +39,9 @@ export default function Forms() {
   };
 
   const itemVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 20 
+    hidden: {
+      opacity: 0,
+      y: 20
     },
     visible: {
       opacity: 1,
@@ -51,9 +54,9 @@ export default function Forms() {
   };
 
   const inputVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: -30 
+    hidden: {
+      opacity: 0,
+      x: -30
     },
     visible: {
       opacity: 1,
@@ -66,9 +69,9 @@ export default function Forms() {
   };
 
   const buttonVariants = {
-    hidden: { 
-      opacity: 0, 
-      scale: 0.9 
+    hidden: {
+      opacity: 0,
+      scale: 0.9
     },
     visible: {
       opacity: 1,
@@ -135,9 +138,9 @@ export default function Forms() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     let formattedValue = value;
-    
+
     if (name === 'telefone') {
       formattedValue = formatTelefone(value);
     }
@@ -168,81 +171,92 @@ export default function Forms() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!validateForm()) {
-    toast.error("Por favor, preencha todos os campos corretamente!");
-    return;
-  }
+    if (!validateForm()) {
+      toast.error("Por favor, preencha todos os campos corretamente!");
+      return;
+    }
 
-  try {
-    const loadingToast = toast.info("Enviando seu cadastro...", {
-      autoClose: false,
-      isLoading: true,
-    });
+    try {
+      const loadingToast = toast.info("Enviando seu cadastro...", {
+        autoClose: false,
+        isLoading: true,
+      });
 
-    const dadosParaEnviar = {
-      nome: formData.nome.trim(),
-      email: formData.email.trim().toLowerCase(),
-      telefone: formData.telefone.replace(/\D/g, '')
-    };
+      // const dadosParaEnviar = {
+      //   nome: formData.nome.trim(),
+      //   email: formData.email.trim().toLowerCase(),
+      //   telefone: formData.telefone.replace(/\D/g, '')
+      // };
+      const plunkData = {
+        email: formData.email.trim().toLowerCase(),
+        subscribed: true,
+        data: {
+          nome: formData.nome.trim(),
+          telefone: formData.telefone.replace(/\D/g, ''),
+          origem: 'site_nobolso',
+          data_cadastro: new Date().toISOString()
+        }
+      };
 
-    console.log('📤 Enviando dados:', dadosParaEnviar);
+      console.log('📤 Enviando dados:', plunkData);
 
-    const response = await fetch('/api/email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dadosParaEnviar),
-    });
+      const response = await fetch(`${PLUNK_API_URL}/contacts`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${PLUNK_SECRET_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(plunkData),
+      });
 
-    const result = await response.json();
-    
-    toast.dismiss(loadingToast);
+      const result = await response.json();
 
-    if (response.ok && result.success) {
-      toast.success("🎉 Cadastro realizado! Verifique seu email.", {
+      toast.dismiss(loadingToast);
+
+      if (response.ok && result.success) {
+        toast.success("🎉 Cadastro realizado! Verifique seu email.", {
+          autoClose: 5000,
+        });
+
+        setFormData({
+          nome: "",
+          email: "",
+          telefone: "",
+          privacidade: false
+        });
+
+        setTimeout(() => {
+          toast.info("📧 Email enviado com sucesso!", {
+            autoClose: 3000,
+          });
+        }, 1000);
+
+      } else {
+        throw new Error(result.message || 'Erro ao processar cadastro');
+      }
+
+    } catch (error) {
+      console.error('❌ Erro no submit:', error);
+
+      let errorMessage = "Erro ao enviar formulário. Tente novamente.";
+
+      if (error.message.includes('Failed to fetch')) {
+        errorMessage = "Erro de conexão. Verifique sua internet.";
+      } else if (error.message.includes('email')) {
+        errorMessage = "Erro com o email. Verifique se está correto.";
+      }
+
+      toast.error(errorMessage, {
         autoClose: 5000,
       });
-
-      setFormData({
-        nome: "",
-        email: "",
-        telefone: "",
-        privacidade: false
-      });
-
-      setTimeout(() => {
-        toast.info("📧 Email enviado com sucesso!", {
-          autoClose: 3000,
-        });
-      }, 1000);
-
-    } else {
-      throw new Error(result.message || 'Erro ao processar cadastro');
     }
-
-  } catch (error) {
-    console.error('❌ Erro no submit:', error);
-    
-    let errorMessage = "Erro ao enviar formulário. Tente novamente.";
-    
-    if (error.message.includes('Failed to fetch')) {
-      errorMessage = "Erro de conexão. Verifique sua internet.";
-    } else if (error.message.includes('email')) {
-      errorMessage = "Erro com o email. Verifique se está correto.";
-    }
-    
-    toast.error(errorMessage, {
-      autoClose: 5000,
-    });
-  }
-};
+  };
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    
+
     let error = "";
     switch (name) {
       case 'nome':
@@ -289,9 +303,9 @@ export default function Forms() {
         pauseOnHover
         theme="light"
       />
-      
+
       {/* Título principal */}
-      <motion.h1 
+      <motion.h1
         className={styles.title}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
@@ -302,7 +316,7 @@ export default function Forms() {
       </motion.h1>
 
       {/* Texto descritivo */}
-      <motion.p 
+      <motion.p
         className={styles.text}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
@@ -314,14 +328,14 @@ export default function Forms() {
       </motion.p>
 
       {/* Container principal do formulário */}
-      <motion.div 
+      <motion.div
         className={styles.container}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
         variants={containerVariants}
       >
         {/* Título do formulário */}
-        <motion.h1 
+        <motion.h1
           className={styles.formTitle}
           variants={itemVariants}
         >
@@ -329,14 +343,14 @@ export default function Forms() {
         </motion.h1>
 
         {/* Formulário */}
-        <motion.form 
+        <motion.form
           className={styles.form}
           variants={containerVariants}
           onSubmit={handleSubmit}
           noValidate
         >
           {/* Campo Nome Completo */}
-          <motion.div 
+          <motion.div
             className={styles.inputGroup}
             variants={inputVariants}
             whileFocus={{ scale: 1.02 }}
@@ -355,7 +369,7 @@ export default function Forms() {
           </motion.div>
 
           {/* Campo E-mail */}
-          <motion.div 
+          <motion.div
             className={styles.inputGroup}
             variants={inputVariants}
             transition={{ delay: 0.05 }}
@@ -375,7 +389,7 @@ export default function Forms() {
           </motion.div>
 
           {/* Campo Telefone */}
-          <motion.div 
+          <motion.div
             className={styles.inputGroup}
             variants={inputVariants}
             transition={{ delay: 0.1 }}
@@ -395,16 +409,16 @@ export default function Forms() {
           </motion.div>
 
           {/* Checkbox de Privacidade */}
-          <motion.div 
+          <motion.div
             className={styles.checkboxGroup}
             variants={itemVariants}
             transition={{ delay: 0.15 }}
           >
             <label className={styles.checkboxLabel}>
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 name="privacidade"
-                className={styles.checkbox} 
+                className={styles.checkbox}
                 checked={formData.privacidade}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -416,13 +430,13 @@ export default function Forms() {
           </motion.div>
 
           {/* Botão de Submit */}
-          <motion.div 
+          <motion.div
             className={styles.button}
             variants={buttonVariants}
             transition={{ delay: 0.2 }}
           >
-            <motion.button 
-              type="submit" 
+            <motion.button
+              type="submit"
               className={styles.submitButton}
               variants={buttonVariants}
               whileHover="hover"
@@ -434,7 +448,7 @@ export default function Forms() {
         </motion.form>
 
         {/* Texto de descrição/privacidade */}
-        <motion.p 
+        <motion.p
           className={styles.description}
           variants={itemVariants}
           transition={{ delay: 0.25 }}
